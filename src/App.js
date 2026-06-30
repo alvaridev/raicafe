@@ -1,6 +1,6 @@
 import { useState } from "react";
     import { AnimatePresence } from "framer-motion"; // Ensure AnimatePresence is imported here
-    import { SplashScreen, FloatingBackground, Header, CategoryBar, MenuCard } from "./components";
+    import { SplashScreen, FloatingBackground, Header, CategoryBar, MenuCard, Footer  } from "./components";
 
 
 const MENU = [
@@ -116,7 +116,7 @@ export default function App() {
   const currentItems = MENU.find((m) => m.category === activeCategory)?.items || [];
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-white/40" dir="rtl">
       <AnimatePresence>
         {splash && <SplashScreen onDone={() => setSplash(false)} />}
       </AnimatePresence>
@@ -124,14 +124,15 @@ export default function App() {
       {!splash && (
         <>
           <FloatingBackground />
-          <div className="relative z-10 max-w-[480px] mx-auto">
+          {/* CHANGE: Added flex flex-col and min-h-screen to push footer down */}
+          <div className="relative z-10 max-w-[480px] mx-auto min-h-screen flex flex-col">
             <Header />
             <CategoryBar
               categories={CATEGORIES}
               active={activeCategory}
               onSelect={setActiveCategory}
             />
-            <main className="px-4 pb-8 pt-2">
+            <main className="px-4 pb-8 pt-2 flex-grow">
               <AnimatePresence mode="wait">
                 <div key={activeCategory}>
                   {currentItems.map((item, i) => (
@@ -140,6 +141,8 @@ export default function App() {
                 </div>
               </AnimatePresence>
             </main>
+            {/* ADD: Footer goes here */}
+            <Footer />
           </div>
         </>
       )}

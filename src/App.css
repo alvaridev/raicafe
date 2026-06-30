@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'BYekan';
+  src: url('./assets/fonts/BYekan+.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 .App {
   text-align: center;
 }

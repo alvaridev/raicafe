@@ -137,7 +137,9 @@ export function FloatingBackground() {
   return (
     <div
       className="fixed inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 5 }} // Increased to 5 to be above the page background but below the menu (which is z-20+)
+      // Change z-index to 1. If it's too low, it's behind the white bg.
+      // If it's too high, it's on top of the text.
+      style={{ zIndex: 1, height: '100vh', width: '100vw' }} 
       aria-hidden="true"
     >
       {FALLING_ITEMS.map((item) => {
@@ -151,12 +153,13 @@ export function FloatingBackground() {
             style={{ 
               left: item.x, 
               top: -100, 
-              opacity: 0.2, // Increased opacity
+              opacity: 0.15, // Reduced slightly for better text readability
               color: "#AEE2FF" 
             }}
             animate={{
-              y: [0, 1200], // Fall down
-              x: [0, Math.sin(item.angle) * 50, -30, 0], // Sway side to side
+              // Use viewport height (120vh) to ensure it goes off screen on all devices
+              y: [0, window.innerHeight + 200], 
+              x: [0, Math.sin(item.angle) * 30, -20, 0], 
               rotate: [0, 360],
             }}
             transition={{
@@ -167,9 +170,9 @@ export function FloatingBackground() {
             }}
           >
             {isBean ? (
-              <CoffeeBeanSVG size={item.size + 10} color="#88C0D0" /> // Made beans slightly darker/bigger
+              <CoffeeBeanSVG size={item.size} color="#88C0D0" />
             ) : (
-              <Icon size={item.size + 10} strokeWidth={1.5} color="#88C0D0" /> // Made icons slightly darker
+              <Icon size={item.size} strokeWidth={1.5} color="#88C0D0" />
             )}
           </motion.div>
         );
@@ -180,9 +183,11 @@ export function FloatingBackground() {
 
 
 
+
 export function Header() {
   return (
-    <header className="sticky top-0 z-30 pt-6 pb-4 px-5 flex flex-col items-center bg-white/80 backdrop-blur-sm">
+    // CHANGE: Changed bg-white/80 backdrop-blur-sm to bg-transparent
+    <header className="sticky top-0 z-30 pt-6 pb-4 px-5 flex flex-col items-center bg-transparent">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -206,6 +211,7 @@ export function Header() {
     </header>
   );
 }
+
 
 export function CategoryBar({ categories, active, onSelect }) {
   const scrollRef = useRef(null);
@@ -317,5 +323,20 @@ export function MenuCard({ item, index }) {
         </div>
       </div>
     </motion.div>
+  );
+}
+// Add this to your components.jsx
+export function Footer() {
+  return (
+    <footer className="mt-auto py-8 px-5 border-t border-[#AEE2FF] shadow-[0_-4px_10px_rgba(174,226,255,0.3)]">
+      <div className="flex flex-col items-center gap-2 text-center">
+        <p className="font-vazirmatn text-sm text-[#1a4a6b] font-semibold">
+          طراحی و توسعه توسط محمدرضا الواری
+        </p>
+        <p className="font-vazirmatn text-[11px] text-[#8899aa]">
+          © 1405 تمامی حقوق برای کافه ری محفوظ است
+        </p>
+      </div>
+    </footer>
   );
 }
