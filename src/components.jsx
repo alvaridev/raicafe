@@ -334,7 +334,7 @@ export function Footer() {
           طراحی و توسعه توسط محمدرضا الواری
         </p>
         <p className="font-vazirmatn text-[11px] text-[#8899aa]">
-          © 1405 تمامی حقوق برای کافه ری محفوظ است
+         تمامی حقوق برای کافه ری محفوظ است
         </p>
       </div>
     </footer>
