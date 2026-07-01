@@ -14,7 +14,6 @@ import {
   Cake,
   Wheat,
   Thermometer,
-  // New icons added for the background animation
   Sandwich,
   Croissant,
   IceCream,
@@ -35,7 +34,6 @@ const CATEGORY_ICONS = {
   "خوراک یا غذا": Utensils,
 };
 
-// Replaced FLOAT_ITEMS with FALLING_ITEMS containing a mix of cafe stuff
 const FALLING_ITEMS = [
   { id: 0, type: "icon", Icon: Coffee, x: "8%", size: 32, dur: 15, delay: 0, angle: -25 },
   { id: 1, type: "icon", Icon: Sandwich, x: "22%", size: 28, dur: 18, delay: 2, angle: 20 },
@@ -50,7 +48,7 @@ const FALLING_ITEMS = [
   { id: 10, type: "bean", x: "48%", size: 22, dur: 14, delay: 4.5, angle: -25 },
 ];
 
-function CoffeeBeanSVG({ size = 24, color = "#AEE2FF", className = "" }) {
+function CoffeeBeanSVG({ size = 24, color = "#AEE2FF", strokeWidth = 1.5, className = "" }) {
   return (
     <svg
       width={size}
@@ -60,9 +58,9 @@ function CoffeeBeanSVG({ size = 24, color = "#AEE2FF", className = "" }) {
       className={className}
       style={{ display: "block" }}
     >
-      <ellipse cx="12" cy="12" rx="8" ry="11" stroke={color} strokeWidth="1.5" fill="none" />
-      <path d="M12 1 Q16 6 16 12 Q16 18 12 23" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M12 1 Q8 6 8 12 Q8 18 12 23" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <ellipse cx="12" cy="12" rx="8" ry="11" stroke={color} strokeWidth={strokeWidth} fill="none" />
+      <path d="M12 1 Q16 6 16 12 Q16 18 12 23" stroke={color} strokeWidth={strokeWidth} fill="none" strokeLinecap="round" />
+      <path d="M12 1 Q8 6 8 12 Q8 18 12 23" stroke={color} strokeWidth={strokeWidth} fill="none" strokeLinecap="round" />
     </svg>
   );
 }
@@ -137,9 +135,7 @@ export function FloatingBackground() {
   return (
     <div
       className="fixed inset-0 pointer-events-none overflow-hidden"
-      // Change z-index to 1. If it's too low, it's behind the white bg.
-      // If it's too high, it's on top of the text.
-      style={{ zIndex: 1, height: '100vh', width: '100vw' }} 
+      style={{ zIndex: 35, height: '100vh', width: '100vw' }} 
       aria-hidden="true"
     >
       {FALLING_ITEMS.map((item) => {
@@ -153,11 +149,10 @@ export function FloatingBackground() {
             style={{ 
               left: item.x, 
               top: -100, 
-              opacity: 0.15, // Reduced slightly for better text readability
-              color: "#AEE2FF" 
+              opacity: 0.35, 
+              color: "#71C9FF" 
             }}
             animate={{
-              // Use viewport height (120vh) to ensure it goes off screen on all devices
               y: [0, window.innerHeight + 200], 
               x: [0, Math.sin(item.angle) * 30, -20, 0], 
               rotate: [0, 360],
@@ -170,9 +165,9 @@ export function FloatingBackground() {
             }}
           >
             {isBean ? (
-              <CoffeeBeanSVG size={item.size} color="#88C0D0" />
+              <CoffeeBeanSVG size={item.size} color="#71C9FF" strokeWidth={2.2} />
             ) : (
-              <Icon size={item.size} strokeWidth={1.5} color="#88C0D0" />
+              <Icon size={item.size} strokeWidth={2.2} color="#71C9FF" />
             )}
           </motion.div>
         );
@@ -181,13 +176,9 @@ export function FloatingBackground() {
   );
 }
 
-
-
-
 export function Header() {
   return (
-    // CHANGE: Changed bg-white/80 backdrop-blur-sm to bg-transparent
-    <header className="sticky top-0 z-30 pt-6 pb-4 px-5 flex flex-col items-center bg-transparent">
+    <header className="pt-6 pb-4 px-5 flex flex-col items-center bg-transparent">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -212,7 +203,6 @@ export function Header() {
   );
 }
 
-
 export function CategoryBar({ categories, active, onSelect }) {
   const scrollRef = useRef(null);
 
@@ -226,13 +216,9 @@ export function CategoryBar({ categories, active, onSelect }) {
   }, [active]);
 
   return (
-    <div
-      className="sticky z-20 bg-white/70 backdrop-blur-md border-b border-[#C5E8FF]/60"
-      style={{ top: "130px" }}
-    >
+    <div className="w-full">
       <div
         ref={scrollRef}
-        /* Changed flex-row-reverse to flex-row and added dir="rtl" to align items cleanly starting from the right */
         className="flex flex-row gap-1 overflow-x-auto scrollbar-hide px-3 py-2"
         dir="rtl"
         style={{ WebkitOverflowScrolling: "touch" }}
@@ -247,7 +233,6 @@ export function CategoryBar({ categories, active, onSelect }) {
               onClick={() => onSelect(cat)}
               className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-xl shrink-0 min-w-[64px] min-h-[56px] focus:outline-none"
               style={{ WebkitTapHighlightColor: "transparent" }}
-              data-testid={`category-${cat}`}
             >
               {isActive && (
                 <motion.div
@@ -278,8 +263,9 @@ export function CategoryBar({ categories, active, onSelect }) {
   );
 }
 
-
 export function MenuCard({ item, index }) {
+  const imagePath = item.image ? process.env.PUBLIC_URL + item.image : null;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -292,16 +278,31 @@ export function MenuCard({ item, index }) {
       }}
       whileTap={{ scale: 0.97, transition: { type: "spring", stiffness: 400, damping: 25 } }}
       className="bg-card rounded-2xl border border-[#C5E8FF]/70 shadow-sm mb-3 overflow-hidden cursor-pointer active:shadow-none"
-      data-testid={`menu-card-${item.id}`}
     >
       <div className="flex flex-row-reverse items-stretch">
         <div
-          className="w-24 shrink-0 flex items-center justify-center"
+          className="w-24 h-24 shrink-0 flex items-center justify-center overflow-hidden relative"
           style={{ background: `${item.color}18` }}
         >
+          {imagePath ? (
+            <img 
+              src={imagePath} 
+              alt={item.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          
+          {/* Fallback box if image is missing or errors out */}
           <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center"
-            style={{ background: `${item.color}30` }}
+            className="absolute inset-0 items-center justify-center"
+            style={{ 
+              background: `${item.color}30`, 
+              display: imagePath ? 'none' : 'flex' 
+            }}
           >
             <div
               className="w-9 h-9 rounded-lg"
@@ -310,22 +311,16 @@ export function MenuCard({ item, index }) {
           </div>
         </div>
 
-        <div className="flex-1 p-4 flex flex-col justify-center gap-1" dir="rtl">
+        <div className="flex-1 p-4 flex flex-col justify-center" dir="rtl">
           <h3 className="font-vazirmatn font-semibold text-[15px] text-[#1a1a2e] leading-snug">
             {item.name}
           </h3>
-          <p className="font-vazirmatn text-[12px] text-[#8899aa] leading-relaxed line-clamp-2">
-            {item.desc}
-          </p>
-          <p className="font-vazirmatn text-[13px] font-bold text-[#1a6b9e] mt-1">
-            {item.price}
-          </p>
         </div>
       </div>
     </motion.div>
   );
 }
-// Add this to your components.jsx
+
 export function Footer() {
   return (
     <footer className="mt-auto py-8 px-5 border-t border-[#AEE2FF] shadow-[0_-4px_10px_rgba(174,226,255,0.3)]">
