@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/raicafe/static/css/main.aa67e5fc.css",
-    "main.js": "/raicafe/static/js/main.3dedc009.js",
+    "main.css": "/raicafe/static/css/main.a2168baf.css",
+    "main.js": "/raicafe/static/js/main.d836ea1d.js",
     "static/media/logo.png": "/raicafe/static/media/logo.55b579ae82650cc79c05.png",
     "index.html": "/raicafe/index.html",
-    "main.aa67e5fc.css.map": "/raicafe/static/css/main.aa67e5fc.css.map",
-    "main.3dedc009.js.map": "/raicafe/static/js/main.3dedc009.js.map"
+    "main.a2168baf.css.map": "/raicafe/static/css/main.a2168baf.css.map",
+    "main.d836ea1d.js.map": "/raicafe/static/js/main.d836ea1d.js.map"
   },
   "entrypoints": [
-    "static/css/main.aa67e5fc.css",
-    "static/js/main.3dedc009.js"
+    "static/css/main.a2168baf.css",
+    "static/js/main.d836ea1d.js"
   ]
 }
